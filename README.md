@@ -1,21 +1,3 @@
-<p align='center'>
-  <img src='https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6dd4f78e0f6c4d3d985a716eff719ba2~tplv-k3u1fbpfcp-zoom-crop-mark:3024:3024:3024:1702.awebp?' width='100%'/>
-</p>
-
-<p align='center'>Collection of TypeScript type challenges</p>
-
-<p align='center'>
-  <a href='https://discord.gg/UgKBCq9'>
-    <img src='https://badgen.net/badge/icon/typescript?icon=typescript&label'/>
-  </a>
-  <a href='https://www.typescriptlang.org/play?install-plugin=%40type-challenges%2Fplayground-plugin'>
-    <img src='https://img.shields.io/badge/Playground-143?logo=typescript&color=3178C6&logoColor=fff' />
-  </a>
-</p>
-
-<br>
-<br/>
-
 ### 目录
 
 - [基础回顾：typescript 入门教程](docs/tutorial.md)
