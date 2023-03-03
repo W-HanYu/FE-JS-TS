@@ -112,7 +112,7 @@ export default defineUserConfig({
       },
       {
         text: "Github",
-        link: "/",
+        link: "/https://github.com/W-HanYu/FE-Typescript.git",
       },
     ],
 

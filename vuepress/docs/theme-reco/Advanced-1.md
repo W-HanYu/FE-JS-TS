@@ -9,8 +9,7 @@ hideComments: false
 ::: tip
 在掌握 TS 基本的类型知识知识后，面对复杂的源码和复杂类型逻辑，我们仍然束手无策。其实我们还需要再次基础之上，将基础类型联合起来做出更多优雅的类型声明。TypeScript 中有很多关键字，如果不去主动接触的话就会少了很多可操作性。例如：infer、keyof、typeof、extends 之类的。还有映射和模板字符串这种概念
 :::
-
-### 1.1 范型
+### 1.1 泛型
 
 ```typescript
 function identity<Type>(arg: Type): Type {
@@ -333,9 +332,9 @@ type Address = Person["address"];
 #### const 断言
 
 TypeScript 3.4 引入了一种新的字面量构造方式，也称为 const 断言。当我们使用 const 断言构造新的字面量表达式时，我们可以向编程语言发出以下信号：
-● 表达式中的任何字面量类型都不应该被扩展；
-● 对象字面量的属性，将使用 readonly 修饰；
-● 数组字面量将变成 readonly 元组。
+- ● 表达式中的任何字面量类型都不应该被扩展；
+- ● 对象字面量的属性，将使用 readonly 修饰；
+- ● 数组字面量将变成 readonly 元组。
 下面我们来举一个 const 断言的例子：
 
 ```typescript
@@ -369,7 +368,7 @@ type Locale = typeof locales[number]["locale"];
 ```
 
 另外在使用 const 断言的时候，我们还需要注意以下两个注意事项：
-● const 断言只适用于简单的字面量表达式
+- ● const 断言只适用于简单的字面量表达式
 
 ```typescript
 // A 'const' assertions can only be applied to references to enum members,
@@ -379,7 +378,7 @@ let a = (Math.random() < 0.5 ? 0 : 1) as const; // error
 let b = Math.random() < 0.5 ? (0 as const) : (1 as const);
 ```
 
-● const 上下文不会立即将表达式转换为完全不可变
+- ● const 上下文不会立即将表达式转换为完全不可变
 
 ```typescript
 let arr = [1, 2, 3, 4];
@@ -417,8 +416,8 @@ color = "yellow"; // Error
 
 #### 参考资料
 
-● typescript-get-types-from-data-using-typeof
-● 5 Very Useful Tricks for TypeScript Typeof Operator
+- ● typescript-get-types-from-data-using-typeof
+- ● 5 Very Useful Tricks for TypeScript Typeof Operator
 
 ### 1.4 条件类型
 
