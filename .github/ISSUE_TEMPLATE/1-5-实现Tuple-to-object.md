@@ -3,7 +3,7 @@ name: 1.5.Tuple-to-object.md
 about: 1-5-实现Tuple-to-object.md
 title: 1-5-实现Tuple-to-object.md
 labels: answer
-assignees: paiDaXing-web
+assignees: Ustinian
             
 ---
             

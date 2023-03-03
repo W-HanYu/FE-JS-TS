@@ -3,7 +3,7 @@ name: 2.3.Readonly2.md
 about: 2-3-实现Readonly2.md
 title: 2-3-实现Readonly2.md
 labels: answer
-assignees: paiDaXing-web
+assignees: Ustinian
             
 ---
             

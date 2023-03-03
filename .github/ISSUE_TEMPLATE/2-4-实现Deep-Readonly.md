@@ -3,7 +3,7 @@ name: 2.4.Deep-Readonly.md
 about: 2-4-实现Deep-Readonly.md
 title: 2-4-实现Deep-Readonly.md
 labels: answer
-assignees: paiDaXing-web
+assignees: Ustinian
             
 ---
             

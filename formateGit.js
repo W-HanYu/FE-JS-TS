@@ -24,7 +24,7 @@ name: ${item}
 about: ${newTitle}
 title: ${newTitle}
 labels: answer
-assignees: paiDaXing-web
+assignees: Ustinian
             
 ---
             

@@ -3,7 +3,7 @@ name: 1.7.Length-of-Tuple.md
 about: 1-7-实现Length-of-Tuple.md
 title: 1-7-实现Length-of-Tuple.md
 labels: answer
-assignees: paiDaXing-web
+assignees: Ustinian
             
 ---
             

@@ -3,7 +3,7 @@ name: 1.6.First-of-array.md
 about: 1-6-实现First-of-array.md
 title: 1-6-实现First-of-array.md
 labels: answer
-assignees: paiDaXing-web
+assignees: Ustinian
             
 ---
             

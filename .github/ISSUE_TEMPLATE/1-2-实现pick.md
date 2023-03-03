@@ -3,7 +3,7 @@ name: 1.2.Pick.md
 about: 1-2-实现Pick.md
 title: 1-2-实现Pick.md
 labels: answer
-assignees: paiDaXing-web
+assignees: Ustinian
             
 ---
             
