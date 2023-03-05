@@ -66,5 +66,5 @@ footer: # 底部模块的配置
   recordLink: ''
   cyberSecurityRecord: 公安备案文案
   cyberSecurityLink: 公安备案地址
-  startYear: 2023
+  startYear: 2022
 ---
