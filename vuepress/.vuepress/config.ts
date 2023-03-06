@@ -112,7 +112,7 @@ export default defineUserConfig({
       },
       {
         text: "Github",
-        link: "/https://github.com/W-HanYu/FE-Typescript.git",
+        link: "/https://github.com/W-HanYu/FE-Typescript",
       },
     ],
 
@@ -150,7 +150,7 @@ export default defineUserConfig({
         {
           type: 'buttongroup',
           children: [
-            { text: '打赏', link: '/docs/others/donate.html' }
+            { text: '打赏', link: '/docs/others/donate.html'}
           ]
         }
       ],

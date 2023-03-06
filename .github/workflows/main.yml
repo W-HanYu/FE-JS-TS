@@ -1,37 +1,29 @@
-name: Build app and deploy to Tencent
-# on:
-#   #监听push操作
-#   push:
-#     branches:
-#       # mian分支，你也可以改成其他分支
-#       - master
+name: Deploy
 
-# jobs:
-#   # 任务ID
-#   build:
-#     # 运行环境
-#     runs-on: ubuntu-latest
-#     # 步骤
-#     steps:
-#       # 使用别人的action
-#       - uses: actions/checkout@v2
-#       # 步骤名称
-#       - name: yarn&build
-#         # 步骤执行指令
-#         run: sh deploy.sh
-#       #- name: yarn build
-#       #run: yarn build
-#       # 命名这个任务为发布Deploy
-#       - name: Deploy
-#         # 因为构建之后，需要把代码上传到服务器上，所以需要连接到ssh，并且做一个拷贝操作
-#         uses: cross-the-world/scp-pipeline@master
-#         env:
-#           WELCOME: "ssh scp ssh pipelines"
-#           LASTSSH: "Doing something after copying"
-#         with:
-#           host: ${{ secrets.USER_HOST }}
-#           user: ${{ secrets.USER_NAME }}
-#           pass: ${{ secrets.USER_PASS }}
-#           connect_timeout: 10s
-#           local: "./vuepress/.vuepress/dist/*"
-#           remote: /usr/local/nginx/html/FE-Typescript
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn docs:build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: vuepress/.vuepress/dist
+          # cname: example.com # if wanna deploy to custom domain

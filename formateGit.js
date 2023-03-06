@@ -111,6 +111,5 @@ function insertStr(str, index, insertStr) {
 function getNum(str) {
   var pattern = new RegExp("[a-z]+");
   var num = str.indexOf(str.match(pattern));
-
   return num;
 }
