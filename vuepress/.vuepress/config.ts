@@ -2,7 +2,7 @@ import { defineUserConfig } from "vuepress";
 import recoTheme from "vuepress-theme-reco";
 
 export default defineUserConfig({
-  title: "FE-Typescript",
+  title: "FE-JS/TS系列",
   description: "Just playing around",
   theme: recoTheme({
     style: "@vuepress-reco/style-default",
