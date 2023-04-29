@@ -23,6 +23,14 @@ export default defineUserConfig({
     },
 
     series: {
+      "/docs/you-dont-know-js/":[
+        {
+          text:"作用域和闭包",
+          children:[
+            "rollup-1"
+          ]
+        }
+      ],
       "/docs/theme-reco/": [
         {
           text: "第一卷:基础概念篇",
@@ -96,10 +104,18 @@ export default defineUserConfig({
       { text: "首页", link: "/" },
 
       {
-        text: "TypeScript",
+        text: "JS",
         children: [
-          { text: "第一卷", link: "/docs/theme-reco/base-1" },
-          { text: "第二卷", link: "/docs/theme-reco/Advanced-1" },
+          { text: "上卷", link: "/docs/you-dont-know-js/rollup-1" },
+          { text: "中卷", link: "/docs/you-dont-know-js/rollup-1" },
+          { text: "下卷", link: "/docs/you-dont-know-js/rollup-1" },
+        ],
+      },
+      {
+        text: "TS",
+        children: [
+          { text: "基础篇", link: "/docs/theme-reco/base-1" },
+          { text: "进阶篇", link: "/docs/theme-reco/Advanced-1" },
         ],
       },
       {
@@ -120,7 +136,7 @@ export default defineUserConfig({
       body: [
         {
           type: 'text',
-          content: `🎉🎉🎉 这是一个专注研究Typescript的网站，在这里你可以全面深入学习Typescript相关知识，你还可以挑战相应的题目，快来学习吧`,
+          content: `🎉🎉🎉 这是一个专注研究JS/TS的网站，在这里你可以全面深入学习JS/TS相关知识，你还可以挑战TS内置体操类型原理实现的相关题目，快来学习吧`,
           style: 'font-size: 12px;'
         },
         { type: 'hr' },

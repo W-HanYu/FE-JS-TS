@@ -33,7 +33,7 @@ customModule:
     borderRadius: "1rem"
   bgImage: "/bg.svg"
   heroText: TypeScript 教程
-  tagline: 易学易懂，题目练习，适合初级、中级、高级TypeScript学习。
+  tagline: 你不知道的JS/TS系列，全面提升前端语言的掌握运用能力！
   buttons:
     - {
         text: 我要学习->,
