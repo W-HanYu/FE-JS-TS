@@ -2,6 +2,7 @@ import { defineUserConfig } from "vuepress";
 import recoTheme from "vuepress-theme-reco";
 
 export default defineUserConfig({
+  base: "/FE-Typescript/",
   title: "FE-JS/TS系列",
   description: "Just playing around",
   theme: recoTheme({
@@ -27,7 +28,10 @@ export default defineUserConfig({
         {
           text:"作用域和闭包",
           children:[
-            "rollup-1"
+            "rollup-1",
+            "rollup-2",
+            // "rollup-3",
+            // "rollup-4",
           ]
         }
       ],
@@ -183,7 +187,5 @@ export default defineUserConfig({
     //   // hideComments: true // 隐藏评论
     // },
   }),
-
-  base: "/FE-Typescript/",
   // debug: true,
 });
