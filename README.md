@@ -1,5 +1,10 @@
 ### 目录
+- [你不知道的JS](vuepress/docs/you-dont-know-js/rollup-1.md)
 
+  - [作用域和闭包](vuepress/docs/you-dont-know-js/rollup-1.md)
+    - [第一章 作用域是什么](vuepress/docs/you-dont-know-js/rollup-1.md)
+    - [第二章 词法作用域](vuepress/docs/you-dont-know-js/rollup-2.md)
+    - [第三章 函数与块作用域](vuepress/docs/you-dont-know-js/rollup-3.md)
 - [基础回顾：typescript 入门教程](docs/tutorial.md)
 
   - [一、typescript 是什么?](docs/tutorial.md#一typescript-是什么)
