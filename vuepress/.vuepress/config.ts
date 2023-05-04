@@ -30,7 +30,7 @@ export default defineUserConfig({
           children:[
             "rollup-1",
             "rollup-2",
-            // "rollup-3",
+            "rollup-3",
             // "rollup-4",
           ]
         }
