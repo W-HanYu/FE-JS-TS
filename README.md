@@ -1,3 +1,5 @@
+<img src="assets/first-page.png" width="100%">
+
 ### 目录
 - [你不知道的JS](vuepress/docs/you-dont-know-js/rollup-1.md)
 

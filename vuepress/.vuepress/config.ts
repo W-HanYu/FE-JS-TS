@@ -31,7 +31,7 @@ export default defineUserConfig({
             "rollup-1",
             "rollup-2",
             "rollup-3",
-            // "rollup-4",
+            "rollup-4",
           ]
         }
       ],
