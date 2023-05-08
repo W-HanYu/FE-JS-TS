@@ -37,7 +37,7 @@ customModule:
   buttons:
     - {
         text: 我要学习->,
-        link: "/FE-Typescript/docs/theme-reco/base-1.html",
+        link: "/FE-Typescript/docs/you-dont-know-js/rollup-1.html",
       }
     - {
         text: 练习题目,

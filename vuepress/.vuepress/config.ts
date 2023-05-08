@@ -33,6 +33,9 @@ export default defineUserConfig({
             "rollup-3",
             "rollup-4",
             "rollup-5",
+            "scope-closures-appA",
+            "scope-closures-appB",
+            "scope-closures-appC",
           ]
         }
       ],
