@@ -37,6 +37,12 @@ export default defineUserConfig({
             "scope-closures-appB",
             "scope-closures-appC",
           ]
+        },
+        {
+          text:"this与对象原型",
+          children:[
+            "rollup-6",
+          ]
         }
       ],
       "/docs/theme-reco/": [
