@@ -42,6 +42,7 @@ export default defineUserConfig({
           text:"this与对象原型",
           children:[
             "rollup-6",
+            "rollup-7",
           ]
         }
       ],
