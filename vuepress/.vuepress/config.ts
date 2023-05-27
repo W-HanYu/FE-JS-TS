@@ -58,6 +58,7 @@ export default defineUserConfig({
             "types-grammar-1",
             "types-grammar-2",
             "types-grammar-3",
+            "types-grammar-4",
           ]
         }
       ],
