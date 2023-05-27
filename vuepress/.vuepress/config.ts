@@ -5,6 +5,7 @@ export default defineUserConfig({
   base: "/FE-Typescript/",
   title: "FE-JS/TS系列",
   description: "Just playing around",
+  port: 8000,
   theme: recoTheme({
     style: "@vuepress-reco/style-default",
     logo: "/logo.png",
@@ -159,7 +160,7 @@ export default defineUserConfig({
       },
       {
         text: "Github",
-        link: "/https://github.com/W-HanYu/FE-Typescript",
+        link: "/https://github.com/W-HanYu/FE-JS-TS",
       },
     ],
 
