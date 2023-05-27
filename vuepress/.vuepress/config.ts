@@ -24,7 +24,7 @@ export default defineUserConfig({
     },
 
     series: {
-      "/docs/you-dont-know-js/":[
+      "/docs/you-dont-know-js/volume-1/":[
         {
           text:"作用域和闭包",
           children:[
@@ -48,6 +48,14 @@ export default defineUserConfig({
             "rollup-10",
             "rollup-11",
             "this-object-prototype-appA"
+          ]
+        }
+      ],
+      "/docs/you-dont-know-js/volume-2/":[
+        {
+          text:"类型与语法",
+          children:[
+              "types-grammar-1"
           ]
         }
       ],
@@ -126,8 +134,8 @@ export default defineUserConfig({
       {
         text: "JS",
         children: [
-          { text: "上卷", link: "/docs/you-dont-know-js/rollup-1" },
-          { text: "中卷", link: "/docs/you-dont-know-js/rollup-1" },
+          { text: "上卷", link: "/docs/you-dont-know-js/volume-1/rollup-1" },
+          { text: "中卷", link: "/docs/you-dont-know-js/volume-2/types-grammar-1" },
           { text: "下卷", link: "/docs/you-dont-know-js/rollup-1" },
         ],
       },
