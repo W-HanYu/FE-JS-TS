@@ -55,7 +55,8 @@ export default defineUserConfig({
         {
           text:"类型与语法",
           children:[
-              "types-grammar-1"
+            "types-grammar-1",
+            "types-grammar-2"
           ]
         }
       ],
