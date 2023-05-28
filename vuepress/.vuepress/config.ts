@@ -25,10 +25,10 @@ export default defineUserConfig({
     },
 
     series: {
-      "/docs/you-dont-know-js/volume-1/":[
+      "/docs/you-dont-know-js/volume-1/": [
         {
-          text:"作用域和闭包",
-          children:[
+          text: "作用域和闭包",
+          children: [
             "rollup-1",
             "rollup-2",
             "rollup-3",
@@ -37,31 +37,32 @@ export default defineUserConfig({
             "scope-closures-appA",
             "scope-closures-appB",
             "scope-closures-appC",
-          ]
+          ],
         },
         {
-          text:"this与对象原型",
-          children:[
+          text: "this与对象原型",
+          children: [
             "rollup-6",
             "rollup-7",
             "rollup-8",
             "rollup-9",
             "rollup-10",
             "rollup-11",
-            "this-object-prototype-appA"
-          ]
-        }
+            "this-object-prototype-appA",
+          ],
+        },
       ],
-      "/docs/you-dont-know-js/volume-2/":[
+      "/docs/you-dont-know-js/volume-2/": [
         {
-          text:"类型与语法",
-          children:[
+          text: "类型与语法",
+          children: [
             "types-grammar-1",
             "types-grammar-2",
             "types-grammar-3",
             "types-grammar-4",
-          ]
-        }
+            "types-grammar-5",
+          ],
+        },
       ],
       "/docs/theme-reco/": [
         {
@@ -139,7 +140,10 @@ export default defineUserConfig({
         text: "JS",
         children: [
           { text: "上卷", link: "/docs/you-dont-know-js/volume-1/rollup-1" },
-          { text: "中卷", link: "/docs/you-dont-know-js/volume-2/types-grammar-1" },
+          {
+            text: "中卷",
+            link: "/docs/you-dont-know-js/volume-2/types-grammar-1",
+          },
           { text: "下卷", link: "/docs/you-dont-know-js/rollup-1" },
         ],
       },
@@ -167,42 +171,40 @@ export default defineUserConfig({
     bulletin: {
       body: [
         {
-          type: 'text',
+          type: "text",
           content: `🎉🎉🎉 这是一个专注研究JS/TS的网站，在这里你可以全面深入学习JS/TS相关知识，你还可以挑战TS内置体操类型原理实现的相关题目，快来学习吧`,
-          style: 'font-size: 12px;'
+          style: "font-size: 12px;",
         },
-        { type: 'hr' },
-        { type: 'title', content: 'QQ 群' },
+        { type: "hr" },
+        { type: "title", content: "QQ 群" },
         {
-          type: 'text',
+          type: "text",
           content: `
           <ul>
             <li>QQ群1：1037296104</li>
             <li>QQ群2：1061561395</li>
             <li>QQ群3：962687802</li>
           </ul>`,
-          style: 'font-size: 12px;'
+          style: "font-size: 12px;",
         },
-        { type: 'hr' },
-        { type: 'title', content: 'GitHub' },
+        { type: "hr" },
+        { type: "title", content: "GitHub" },
         {
-          type: 'text',
+          type: "text",
           content: `
           <ul>
             <li><a href="https://github.com/W-HanYu/FE-Typescript.git/issues">Issues<a/></li>
             <li><a href="https://github.com/W-HanYu/FE-Typescript.git/discussions/1">Discussions<a/></li>
           </ul>`,
-          style: 'font-size: 12px;'
+          style: "font-size: 12px;",
         },
-        { type: 'hr', },
+        { type: "hr" },
         {
-          type: 'buttongroup',
-          children: [
-            { text: '打赏', link: '/docs/others/donate.html'}
-          ]
-        }
+          type: "buttongroup",
+          children: [{ text: "打赏", link: "/docs/others/donate.html" }],
+        },
       ],
-    }
+    },
 
     // valineConfig 配置与 1.x 一致
     // valineConfig: {
