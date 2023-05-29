@@ -98,6 +98,30 @@ export default defineUserConfig({
           ],
         },
       ],
+      "/docs/graphicalNetwork/":[
+        {
+          text: "基础篇",
+          children:[
+            "basic-1",
+            "basic-2",
+            "basic-3"
+          ]
+        },
+        {
+          text: "HTTP篇",
+          children:[
+            "http-interview",
+            "http-optimize",
+            "https-rsa",
+            "https-ecdhe",
+            "https-optimize",
+            "http-2",
+            "http-3",
+            "http-rpc",
+            "http-websocket"
+          ]
+        }
+      ],
       "/docs/challenge/": [
         {
           text: "第一章:简单",
@@ -153,6 +177,10 @@ export default defineUserConfig({
           { text: "基础篇", link: "/docs/theme-reco/base-1" },
           { text: "进阶篇", link: "/docs/theme-reco/Advanced-1" },
         ],
+      },
+      {
+        text: "图解网络",
+        link: "/docs/graphicalNetwork/basic-1",
       },
       {
         text: "挑战",
