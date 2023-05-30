@@ -98,18 +98,14 @@ export default defineUserConfig({
           ],
         },
       ],
-      "/docs/graphicalNetwork/":[
+      "/docs/graphicalNetwork/": [
         {
           text: "基础篇",
-          children:[
-            "basic-1",
-            "basic-2",
-            "basic-3"
-          ]
+          children: ["basic-1", "basic-2", "basic-3"],
         },
         {
           text: "HTTP篇",
-          children:[
+          children: [
             "http-interview",
             "http-optimize",
             "https-rsa",
@@ -118,9 +114,28 @@ export default defineUserConfig({
             "http-2",
             "http-3",
             "http-rpc",
-            "http-websocket"
-          ]
-        }
+            "http-websocket",
+          ],
+        },
+        {
+          text: "TCP篇",
+          children: [
+            "tcp-interview",
+            "tcp-feature",
+            "tcp-dump",
+            "tcp-queue",
+            "tcp-optimize",
+            "tcp-stream",
+            "tcp-isn-deff",
+            "tcp-syn",
+            "tcp-challenge-ack",
+            "tcp-out-of-order-fin"
+          ],
+        },
+        {
+          text: "IP篇",
+          children: [],
+        },
       ],
       "/docs/challenge/": [
         {
@@ -221,15 +236,15 @@ export default defineUserConfig({
           type: "text",
           content: `
           <ul>
-            <li><a href="https://github.com/W-HanYu/FE-Typescript.git/issues">Issues<a/></li>
-            <li><a href="https://github.com/W-HanYu/FE-Typescript.git/discussions/1">Discussions<a/></li>
+            <li><a href="https://github.com/W-HanYu/FE-JS-TS/issues">Issues<a/></li>
+            <li><a href="https://github.com/W-HanYu/FE-JS-TS/discussions/17">Discussions<a/></li>
           </ul>`,
           style: "font-size: 12px;",
         },
         { type: "hr" },
         {
           type: "buttongroup",
-          children: [{ text: "打赏", link: "/docs/others/donate.html" }],
+          children: [{ text: "打赏", link: "/docs/others/donate" }],
         },
       ],
     },
