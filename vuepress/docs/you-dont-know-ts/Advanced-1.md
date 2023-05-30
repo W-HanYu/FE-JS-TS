@@ -171,7 +171,7 @@ Argument of type '"date"' is not assignable to parameter of type '"id" | "text" 
 在使用对象的数值属性时，我们也可以使用 keyof 关键字。请记住，如果我们定义一个带有数值属性的对象，那么我们既需要定义该属性，又需要使用数组语法访问该属性， 如下所示：
 
 ```typescript
-lass ClassWithNumericProperty {
+class ClassWithNumericProperty {
 [1]: string = "Semlinker";
 }
 
@@ -269,6 +269,21 @@ type K1 = keyof StringIndexArray; // type K1 = string | number
 type K2 = keyof NumberIndexArray; // type K2 = number
 ```
 
+
+::: details 参考
+这段代码定义了两个 TypeScript 接口（interface）：`StringIndexArray` 和 `NumberIndexArray`。这两个接口都定义了一个索引签名（index signature），用于访问接口中的属性。
+
+`StringIndexArray` 接口的索引签名定义为 `[index: string]: string`，这意味着可以用任何字符串作为属性名来访问 `StringIndexArray` 对象中的属性，并且属性的值必须是字符串类型。
+
+`NumberIndexArray` 接口的索引签名定义为 `[index: number]: string`，这意味着可以用任何数字作为属性名来访问 `NumberIndexArray` 对象中的属性，并且属性的值必须是字符串类型。
+
+接下来，代码定义了两个类型别名（type alias）：`K1` 和 `K2`。这些类型别名用于获取接口中的属性名称，即接口中所有可用的索引签名的键（key）。
+
+`keyof` 是 TypeScript 的一个关键字，用于获取一个类型的所有`键`的联合类型。`K1` 的类型定义为 `keyof StringIndexArray`，这意味着 `K1` 是 `StringIndexArray` 中所有可用的键的联合类型。由于 `StringIndexArray` 中的索引签名可以使用`任何字符串`作为键(`在javascript中，obj['1'] === obj[1]`),因此 `K1` 的类型为 `string | number`，即字符串和数字类型的联合类型。
+
+同样地，`K2` 的类型定义为 `keyof NumberIndexArray`，这意味着 `K2` 是 `NumberIndexArray` 中所有可用的键的联合类型。由于 `NumberIndexArray` 中的索引签名只能使用数字作为键，因此 `K2` 的类型为 `number`，即数字类型。
+:::
+
 #### 参考资料
 
 ● [keyof-and-lookup-types-in-typescript](https://mariusschulz.com/blog/keyof-and-lookup-types-in-typescript)<br/>
@@ -299,7 +314,7 @@ const lolo: Sem = { name: "lolo", age: 5 };
 
 #### 应用场景
 
-- 1.Get the type of the object
+- 1.获取对象的类型
   ![1](../assets/typeof-object.png)
   man 对象是一个常规的 JavaScript 对象，在 TypeScript 中你可以使用类型或接口来定义对象的类型。使用此对象类型，您可以使用 TypeScript 的内置实用程序类型（例如 Partial、Required、Pick 或 Readonly）来处理对象类型以满足不同的需求。
   对于简单的对象，这可能没什么大不了的。但是对于嵌套层次更深的大型复杂对象，手动定义太麻烦。要解决这个问题，可以使用 typeof 运算符。
@@ -311,20 +326,20 @@ type Address = Person["address"];
 
 与之前手动定义类型相比，使用 typeof 运算符变得容易得多。 Person["address"] 是一种索引访问类型，用于在另一种类型（Person 类型）上查找特定属性（地址）。
 
-- 2.Get a type That Represents All Enum Keys As Strings
+- 2.获取一个类型，该类型将所有枚举键表示为字符串。
   在 TypeScript 中，枚举类型是编译成常规 JavaScript 对象的特殊类型：
   ![2](../assets/typeeof-enum.png)
   因此，您还可以在枚举类型上使用 typeof 运算符。但这通常没有太大的实际用途，在处理枚举类型时，通常与 keyof 运算符结合使用：
   ![3](../assets/typeof-enum2.png)
-- 3.Get the type of the Function Object
+- 3.获取函数对象的类型
   还有另一种更常见的场景，在您的工作中使用 typeof 运算符。获取到对应的函数类型后，可以继续使用 TypeScript 内置的 ReturnType 和 Parameters 实用类型分别获取函数的返回值类型和参数类型。
   ![4](../assets/object.png)
-- 4. Get the Type of the Class Object
+- 4. 获取类对象的类型
      既然 typeof 操作符可以处理函数对象，那么它可以处理 Class 对象吗？答案是肯定的。
      ![4](../assets/class1.png)
      在上面的代码中，createPoint 是一个工厂函数，它创建了一个 Point 类的实例。通过 typeof 操作符可以获取 Point 类对应的构造签名，从而实现对应的类型校验。在定义 Constructor 的参数类型时，如果没有使用 typeof 操作符，会出现如下错误信息：
      ![4](../assets/class2.png)
-- 5. Get a More Precise Type
+- 5. 获得更精确的类型
      在使用 typeof 运算符时，如果你想得到更精确的类型，那么可以将它与 TypeScript 3.4 版本中引入的 const 断言结合起来。这以以下方式使用。
      ![4](../assets/class3.png)
      从上图可以看出，在使用了 const 断言之后，再使用 typeof 操作符，我们可以得到更精确的类型。

@@ -2,7 +2,7 @@ import { defineUserConfig } from "vuepress";
 import recoTheme from "vuepress-theme-reco";
 
 export default defineUserConfig({
-  base: "/FE-Typescript/",
+  base: "/",
   title: "FE-JS/TS系列",
   description: "Just playing around",
   port: 8000,
@@ -64,7 +64,7 @@ export default defineUserConfig({
           ],
         },
       ],
-      "/docs/theme-reco/": [
+      "/docs/you-dont-know-ts/": [
         {
           text: "第一卷:基础概念篇",
           children: [
@@ -129,7 +129,7 @@ export default defineUserConfig({
             "tcp-isn-deff",
             "tcp-syn",
             "tcp-challenge-ack",
-            "tcp-out-of-order-fin"
+            "tcp-out-of-order-fin",
           ],
         },
         {
@@ -189,8 +189,8 @@ export default defineUserConfig({
       {
         text: "TS",
         children: [
-          { text: "基础篇", link: "/docs/theme-reco/base-1" },
-          { text: "进阶篇", link: "/docs/theme-reco/Advanced-1" },
+          { text: "基础篇", link: "/docs/you-dont-know-ts/base-1" },
+          { text: "进阶篇", link: "/docs/you-dont-know-ts/Advanced-1" },
         ],
       },
       {
