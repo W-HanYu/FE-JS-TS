@@ -11,7 +11,7 @@ export default defineUserConfig({
     logo: "/logo.png",
     author: "wangtao",
     docsRepo: "",
-    docsBranch: "main",
+    docsBranch: "master",
     docsDir: "example",
     lastUpdatedText: "",
     // series 为原 sidebar
