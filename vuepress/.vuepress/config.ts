@@ -206,8 +206,8 @@ export default defineUserConfig({
         text: "挑战",
         children: [
           { text: "简单", link: "/docs/challenge/1.1.hello-world.html" },
-          { text: "中等", link: "/blogs/other/guide" },
-          { text: "困难", link: "/blogs/other/guide" },
+          { text: "中等", link: "/docs/challenge/2.1.Get-Return-Type" },
+          { text: "困难", link: "/docs/challenge/3.1.Simple-Vue" },
         ],
       },
       {
