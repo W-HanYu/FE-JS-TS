@@ -61,8 +61,12 @@ export default defineUserConfig({
             "types-grammar-3",
             "types-grammar-4",
             "types-grammar-5",
-            "types-grammar-apA"
+            "types-grammar-apA",
           ],
+        },
+        {
+          text: "异步与性能",
+          children: ["async-performance-ch1", "async-performance-ch2"],
         },
       ],
       "/docs/you-dont-know-ts/": [
