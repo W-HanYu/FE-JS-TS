@@ -14,13 +14,13 @@ bannerBrand:
     margin: "0 auto 1rem"
     borderRadius: "1rem"
   bgImage: "/bg.svg"
-  heroText: FE-TypeScript
-  tagline: 这是一个专注研究Typescript的网站，在这里你可以全面深入学习Typescript相关知识，你还可以挑战相应的题目，快来学习吧。
+  heroText: FE-JS/TS
+  tagline: 这是一个专注于深入研究JS/TS的网站，你可以全面学习JS/TS相关知识，挑战相应的题目，快来加入吧！
   buttons:
-    - { text: 我要学习, link: "/FE-Typescript/docs/theme-reco/base-1.html" }
+    - { text: 我要学习, link: "/docs/you-dont-know-js/volume-1/rollup-1.html" }
     - {
         text: 我要挑战,
-        link: "/FE-Typescript/docs/challenge/1.1.hello-world.html",
+        link: "/docs/challenge/1.1.hello-world.html",
         type: "plain",
       }
 customModule:
@@ -33,15 +33,15 @@ customModule:
     borderRadius: "1rem"
   bgImage: "/bg.svg"
   heroText: JS/TS 教程
-  tagline: 你不知道的JS/TS系列，全面提升前端语言的掌握运用能力！
+  tagline: 掌握《你不知道的JS/TS》系列，全面提升前端语言的应用能力！
   buttons:
     - {
         text: 我要学习->,
-        link: "/FE-Typescript/docs/you-dont-know-js/rollup-1.html",
+        link: "/docs/you-dont-know-js/volume-1/rollup-1.html",
       }
     - {
-        text: 练习题目,
-        link: "/FE-Typescript/docs/challenge/1.1.hello-world.html",
+        text: 实践练习,
+        link: "/docs/challenge/1.1.hello-world.html",
         type: "plain",
       }
   feature:
