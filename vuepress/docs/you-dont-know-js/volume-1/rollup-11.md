@@ -272,7 +272,7 @@ b2.speak();
 
 首先，类风格的代码段意味着这样的实体与它们的关系的思维模型：
 
-<img src="./assets/this-object-prototypes-fig6.1.png">
+<!-- <img src="../assets/this-object-prototypes-fig6.1.png"> -->
 
 实际上，这有点儿不公平/误导，因为它展示了许多额外的，你在 _技术上_ 一直不需要知道（虽然你 _需要_ 理解它）的细节。一个关键是，它是一系列十分复杂的关系。但另一个关键是：如果你花时间来沿着这些关系的箭头走，在 JS 的机制中 **有数量惊人的内部统一性**。
 
@@ -280,13 +280,13 @@ b2.speak();
 
 好了，现在让我们看一个这张图的 _稍稍_ 简化的版本，用它来进行比较稍微“公平”一点 —— 它仅展示了 _相关_ 的实体与关系。
 
-<img src="./assets/this-object-prototypes-fig6.2png">
+<!-- <img src="../assets/this-object-prototypes-fig6.2png"> -->
 
 仍然非常复杂，对吧？虚线描绘了当你在 `Foo.prototype` 和 `Bar.prototype` 间建立“继承”时的隐含关系，而且还没有 _修复_ **丢失的** `.constructor` 属性引用（见第五章“复活构造器”）。即便将虚线去掉，每次你与对象链接打交道时，这个思维模型依然要变很多可怕的戏法。
 
 现在，让我们看看 OLOO 风格代码的思维模型：
 
-<img src="./assets/this-object-prototypes-fig6.3png">
+<!-- <img src="../assets/this-object-prototypes-fig6.3png"> -->
 
 正如你比较它们所得到的，十分明显，OLOO 风格的代码 _需要关心的东西少太多了_，因为 OLOO 风格代码接受了 **事实**：我们唯一需要真正关心的事情是 **链接到其他对象的对象**。
 

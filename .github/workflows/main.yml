@@ -1,34 +1,28 @@
 name: Deploy
-
 on:
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v3
-        id: yarn-cache
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: yarn
+      - run: yarn install --frozen-lockfile
 
-      - name: Install dependencies
-        run: yarn --prefer-offline
-        
-      - name: Run deploy.sh
-        env:
-          ACCESS_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
-          BRANCH: gh-pages
-        run: yarn deploy
+      - name: Build
+        run: yarn vuepress:build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.DEPLOY_TOKEN }}
+          publish_dir: vuepress/.vuepress/dist
+          # cname: example.com # if wanna deploy to custom domain
