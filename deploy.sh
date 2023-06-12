@@ -7,17 +7,17 @@ set -e
 # 生成静态文件
 cd vuepress
 
-yarn deploy
+yarn build
 
 # 进入生成的文件夹
-cd .vuepress/dist
+cd vuepress/.vuepress/dist
 
 git init
 git add -A
 git commit -m 'deploy'
 
 # 如果发布到 https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:w-hanyu/FE-JS-TS.git master:master
+git push -f git@github.com:w-hanyu/FE-JS-TS.git master:gh-pages
 
 cd -
 
