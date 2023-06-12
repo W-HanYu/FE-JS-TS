@@ -2,7 +2,7 @@ import { defineUserConfig } from "vuepress";
 import recoTheme from "vuepress-theme-reco";
 
 export default defineUserConfig({
-  base: "/FE-JS-TS/",
+  base: "/",
   title: "FE-JS/TS系列",
   description: "Just playing around",
   port: 8000,
@@ -139,7 +139,7 @@ export default defineUserConfig({
         },
         {
           text: "IP篇",
-          children: [],
+          children: ["ip-base", "ip-ping", "ip-ping_io"],
         },
       ],
       "/docs/challenge/": [
