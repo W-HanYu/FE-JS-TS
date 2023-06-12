@@ -18,11 +18,12 @@ jobs:
       - run: yarn install --frozen-lockfile
 
       - name: Build
-        run: yarn vuepress:build
+        run: cd vuepress && yarn build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.DEPLOY_TOKEN }}
+          target_branch: gh-pages
           publish_dir: vuepress/.vuepress/dist
           # cname: example.com # if wanna deploy to custom domain
