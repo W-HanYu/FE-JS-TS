@@ -9,7 +9,7 @@ cd vuepress
 npm run build
 
 # 进入生成的文件夹
-cd vuepress/.vuepress/dist
+cd ./vuepress/.vuepress/dist
 
 git init
 git add -A

@@ -2,7 +2,7 @@ import { defineUserConfig } from "vuepress";
 import recoTheme from "vuepress-theme-reco";
 
 export default defineUserConfig({
-  base: "/",
+  base: "/FE-JS-TS/",
   title: "FE-JS/TS系列",
   description: "Just playing around",
   port: 8000,
@@ -212,7 +212,7 @@ export default defineUserConfig({
       },
       {
         text: "Github",
-        link: "/https://github.com/W-HanYu/FE-JS-TS",
+        link: "https://github.com/W-HanYu/FE-JS-TS",
       },
     ],
 
@@ -249,7 +249,7 @@ export default defineUserConfig({
         { type: "hr" },
         {
           type: "buttongroup",
-          children: [{ text: "打赏", link: "/docs/others/donate" }],
+          children: [{ text: "打赏", link: "/FE-JS-TS/docs/others/donate" }],
         },
       ],
     },
