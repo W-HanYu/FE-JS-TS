@@ -66,7 +66,16 @@ export default defineUserConfig({
         },
         {
           text: "异步与性能",
-          children: ["async-performance-ch1", "async-performance-ch2"],
+          children: [
+            "async-performance-ch1",
+            "async-performance-ch2",
+            "async-performance-ch3",
+            "async-performance-ch4",
+            "async-performance-ch5",
+            "async-performance-ch6",
+            "async-performance-apA",
+            "async-performance-apB",
+          ],
         },
       ],
       "/docs/you-dont-know-ts/": [
