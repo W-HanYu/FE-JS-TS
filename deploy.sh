@@ -6,7 +6,7 @@ set -e
 
 # 生成静态文件
 cd vuepress
-npm run build
+npm run deploy
 
 # 进入生成的文件夹
 cd vuepress/.vuepress/dist
