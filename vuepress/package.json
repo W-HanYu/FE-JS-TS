@@ -9,7 +9,7 @@
     "dev": "vuepress dev .",
     "start": "vuepress dev .",
     "build": "vuepress build .",
-    "deploy": "vuepress build . && gh-pages -d dist"
+    "deploy": "vuepress build -d && gh-pages -d dist"
   },
   "dependencies": {
     "@type-challenges/utils": "^0.1.1",
