@@ -3,8 +3,7 @@
     "@vuepress-reco/vuepress-plugin-comments": "^1.6.13"
   },
   "scripts": {
-    "fc": "node formateGit.js",
-    "deploy": "vuepress build && gh-pages -d dist"
+    "fc": "node formateGit.js"
   },
   "devDependencies": {
     "gh-pages": "^5.0.0"
