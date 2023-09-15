@@ -14,7 +14,7 @@ export default defineUserConfig({
     docsBranch: "master",
     docsDir: "example",
     lastUpdatedText: "",
-    // series 为原 sidebar
+    subSidebar: 'auto',
     commentConfig: {
       type: "valine",
       options: {
