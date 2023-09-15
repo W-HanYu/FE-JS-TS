@@ -8,8 +8,8 @@
   "scripts": {
     "dev": "vuepress dev .",
     "start": "vuepress dev .",
-    "build": "vuepress build -d",
-    "deploy": "vuepress build && gh-pages -d dist"
+    "build": "vuepress build .",
+    "deploy": "vuepress build . && gh-pages -d dist"
   },
   "dependencies": {
     "@type-challenges/utils": "^0.1.1",
