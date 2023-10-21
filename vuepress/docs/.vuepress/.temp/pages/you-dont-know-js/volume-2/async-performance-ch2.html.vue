@@ -1,0 +1,384 @@
+<template><div><h1 id="第2章-回调" tabindex="-1"><a class="header-anchor" href="#第2章-回调" aria-hidden="true">#</a> 第2章: 回调</h1>
+<p>在第一章中，我们探讨了 JavaScript 中关于异步编程的术语和概念。我们的焦点是理解驱动所有“事件”（异步函数调用）的单线程（一次一个）事件轮询队列。我们还探讨了各种解释 <em>同时</em> 运行的事件链，或“进程”（任务， 函数调用等）间的关系的并发模式。</p>
+<p>我们在第一章的所有例子中，将函数作为独立的，不可分割的操作单位使用，在这些函数内部语句按照可预知的顺序运行（在编译器水平之上！），但是在函数顺序水平上，事件（也就是异步函数调用）可以以各种顺序发生。</p>
+<p>在所有这些情况中，函数都是一个“回调”。因为无论什么时候事件轮询队列中的事件被处理时，这个函数都作为事件轮询“调用并返回”程序的目标。</p>
+<p>正如你观察到的，在 JS 程序中，回调是到目前为止最常见的表达和管理异步的方式。确实，在 JavaScript 语言中回调是最基础的异步模式。</p>
+<p>无数的 JS 程序，即便是最精巧最复杂的程序，都曾经除了回调外不依靠任何其他异步模式而编写（当然，和我们在第一章中探讨的并发互动模式一起）。回调函数是 JavaScript 的异步苦工，而且它工作得相当好。</p>
+<p>除了……回调并不是没有缺点。许多开发者都对 <em>Promises</em> 提供的更好的异步模式感到兴奋不已。但是如果你不明白它在抽象什么，和为什么抽象，是不可能有效利用任何抽象机制的。</p>
+<p>在本章中，我们将深入探讨这些话题，来说明为什么更精巧的异步模式（在本书的后续章节中探讨）是必要和被期望的。</p>
+<h2 id="延续" tabindex="-1"><a class="header-anchor" href="#延续" aria-hidden="true">#</a> 延续</h2>
+<p>让我们回到在第一章中开始的异步回调的例子，但让我稍微修改它一下来画出重点：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token comment">// A</span>
+<span class="token function">ajax</span><span class="token punctuation">(</span> <span class="token string">".."</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">.</span><span class="token punctuation">.</span></span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	<span class="token comment">// C</span>
+<span class="token punctuation">}</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// B</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><code v-pre>// A</code>和<code v-pre>// B</code>代表程序的前半部分（也就是 <em>现在</em>），<code v-pre>// C</code>标识了程序的后半部分（也就是 <em>稍后</em>）。前半部分立即执行，然后会出现一个不知多久的“暂停”。在未来某个时刻，如果 Ajax 调用完成了，那么程序会回到它刚才离开的地方，并 <em>继续</em> 执行后半部分。</p>
+<p>换句话说，回调函数包装或封装了程序的 <em>延续</em>。</p>
+<p>让我们把代码弄得更简单一些：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token comment">// A</span>
+<span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// C</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// B</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>稍停片刻然后问你自己，你将如何描述（给一个不那么懂 JS 工作方式的人）这个程序的行为。来吧，大声说出来。这个很好的练习将使我的下一个观点更鲜明。</p>
+<p>现在大多数读者可能在想或说着这样的话：“做 A，然后设置一个等待 1000 毫秒的定时器，一旦它触发，就做 C”。与你的版本有多接近？</p>
+<p>你可能已经发觉了不对劲儿的地方，给了自己一个修正版：“做 A，设置一个 1000 毫秒的定时器，然后做 B，然后在超时事件触发后，做 C”。这比第一个版本更准确。你能发现不同之处吗？</p>
+<p>虽然第二个版本更准确，但是对于以一种将我们的大脑匹配代码，代码匹配 JS 引擎的方式讲解这段代码来说，这两个版本都是不足的。这里的鸿沟既是微小的也是巨大的，而且是理解回调作为异步表达和管理的缺点的关键。</p>
+<p>只要我们以回调函数的方式引入一个延续（或者像许多程序员那样引入几十个！），我们就允许了一个分歧在我们的大脑如何工作和代码将运行的方式之间形成。当这两者背离时，我们的代码就不可避免地陷入这样的境地：更难理解，更难推理，更难调试，和更难维护。</p>
+<h2 id="顺序的大脑" tabindex="-1"><a class="header-anchor" href="#顺序的大脑" aria-hidden="true">#</a> 顺序的大脑</h2>
+<p>我相信大多数读者都曾经听某个人说过（甚至你自己就曾这么说），“我能一心多用”。试图表现得一心多用的效果包含幽默（孩子们的拍头揉肚子游戏），平常的行为（边走边嚼口香糖），和彻头彻尾的危险（开车时发微信）。</p>
+<p>但我们是一心多用的人吗？我们真的能执行两个意识，有意地一起行动并在完全同一时刻思考/推理它们两个吗？我们最高级的大脑功能有并行的多线程功能吗？</p>
+<p>答案可能令你吃惊：<strong>可能不是这样。</strong></p>
+<p>我们的大脑其实就不是这样构成的。我们中大多数人（特别是 A 型人格！）都是自己不情愿承认的一个一心一用者。其实我们只能在任一给定的时刻考虑一件事情。</p>
+<p>我不是说我们所有的下意识，潜意识，大脑的自动功能，比如心跳，呼吸，和眨眼。那些都是我们延续生命的重要任务，我们不会有意识地给它们分配大脑的能量。谢天谢地，当我们在 3 分钟内第 15 次刷朋友圈时，我们的大脑在后台（线程！）继续着这些重要任务。</p>
+<p>相反我们讨论的是在某时刻我们的意识最前线的任务。对我来说，是现在正在写这本书。我还在这完全同一个时刻做其他高级的大脑活动吗？不，没有。我很快而且容易分心——在这最后的几段中有几十次了！</p>
+<p>当我们 <em>模拟</em> 一心多用时，比如试着在打字的同时和朋友或家人通电话，实际上我们表现得更像一个快速环境切换器。换句话说，我们快速交替地在两个或更多任务间来回切换，在微小，快速的区块中 <em>同时</em> 处理每个任务。我们做的是如此之快，以至于从外界看开我们在 <em>平行地</em> 做这些事情。</p>
+<p>难道这听起来不像异步事件并发吗（就像 JS 中发生的那样）？！如果不，回去再读一遍第一章！</p>
+<p>事实上，将庞大复杂的神经内科世界简化为我希望可以在这里讨论的东西的一个方法是，我们的大脑工作起来有点儿像事件轮询队列。</p>
+<p>如果你把我打得每一个字（或词）当做一个单独的异步事件，那么现在这一句话上就有十几处地方，可以让我的大脑被其他的事件打断，比如我的感觉，甚至只是我随机的想法。</p>
+<p>我不会在每个可能的地方被打断并被拉到其他的“处理”上去（谢天谢地——要不这本书永远也写不完了！）。但是它发生得也足够频繁，以至于我感到我的大脑几乎持续不断地切换到各种不同的环境（也就是“进程”）。而且这和 JS 引擎可能会感觉到的十分相像。</p>
+<h3 id="执行与计划" tabindex="-1"><a class="header-anchor" href="#执行与计划" aria-hidden="true">#</a> 执行与计划</h3>
+<p>好了，这么说来我们的大脑可以被认为是运行在一个单线程事件轮询队列中，就像 JS 引擎那样。这听起来是个不错的匹配。</p>
+<p>但是我们需要比我们刚才分析的更加细致入微。在我们如何计划各种任务，和我们的大脑实际如何运行这些任务之间，有一个巨大，明显的不同。</p>
+<p>再一次，回到这篇文章的写作的比拟上来。在我心里的粗略计划轮廓是继续写啊写，顺序地经过一系列在我思想中定好的点。我没有在这次写作期间计划任何的打扰或非线性的活动。但无论如何，我的大脑依然一直不停地切换。</p>
+<p>即便在操作级别上我们的大脑是异步事件的，但我们还是用一种顺序的，同步的方式计划任务。“我得去商店，然后买些牛奶，然后去干洗店”。</p>
+<p>你会注意到这种高级思维（规划）方式看起来不是那么“异步”。事实上，我们几乎很少会故意只用事件的形式思考。相反，我们小心，顺序地（A 然后 B 然后 C）计划，而且我们假设一个区间有某种临时的阻塞迫使 B 等待 A，使 C 等待 B。</p>
+<p>当开发者编写代码时，他们规划一组将要发生的动作。如果他们是合格的开发者，他们会 <strong>小心地规划</strong>。比如“我需要将<code v-pre>z</code>的值设为<code v-pre>x</code>的值，然后将<code v-pre>x</code>的值设为<code v-pre>y</code>的值”。</p>
+<p>当我们编写同步代码时，一个语句接一个语句，它工作起来就像我们的跑腿 todo 清单：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token comment">// 交换`x`与`y`(通过临时变量`z`)</span>
+z <span class="token operator">=</span> x<span class="token punctuation">;</span>
+x <span class="token operator">=</span> y<span class="token punctuation">;</span>
+y <span class="token operator">=</span> z<span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>这三个赋值语句是同步的，所以<code v-pre>x=y</code>会等待<code v-pre>z=x</code>完成，而<code v-pre>y=z</code>会相应地等待<code v-pre>x=y</code>完成。另一种说法是这三个语句临时地按照特定的顺序绑在一起执行，一个接一个。幸好我们不必在这里关心任何异步事件的细节。如果我们关心，代码很快就会变得非常复杂！</p>
+<p>如果同步的大脑规划和同步的代码语句匹配的很好，那么我们的大脑能把异步代码规划得多好呢？</p>
+<p>事实证明，我们在代码中表达异步的方式（用回调）和我们同步的大脑规划行为根本匹配的不是很好。</p>
+<p>你能实际想象一下像这样规划你的跑腿 todo 清单的思维线索吗？</p>
+<blockquote>
+<p>“我得去趟商店，但是我确信在路上我会接到一个电话，于是‘嗨，妈妈’，然后她开始讲话，我会在 GPS 上搜索商店的位置，但那会花几分钟加载，所以我把收音机音量调小以便听到妈妈讲话，然后我发现我忘了穿夹克而且外面很冷，但没关系，继续开车并和妈妈说话，然后安全带警报提醒我要系好，于是‘是的，妈，我系着安全带呢，我总是系着安全带！’。啊，GPS 终于得到方向了，现在……”</p>
+</blockquote>
+<p>虽然作为我们如何度过自己的一天，思考以什么顺序做什么事的规划听起来很荒唐，但这正是我们大脑在功能层面运行的方式。记住，这不是一心多用，而只是快速的环境切换。</p>
+<p>我们这些开发者编写异步事件代码困难的原因，特别是当我们只有回调手段可用时，就是意识思考/规划的流动对我们大多数人是不自然的。</p>
+<p>我们用一步接一步的方式思考，但是一旦我们从同步走向异步，在代码中可以用的工具（回调）不是以一步接一步的方式表达的。</p>
+<p>而且这就是为什么正确编写和推理使用回调的异步 JS 代码是如此困难：因为它不是我们的大脑进行规划的工作方式。</p>
+<p><strong>注意：</strong> 唯一比不知道为什么代码不好用更糟糕的是，从一开始就不知道为什么代码好用！这是一种经典的“纸牌屋”心理：“它好用，但不知为什，所以大家都别碰！”你可能听说过，“他人即地狱”（萨特），而程序员们模仿这种说法，“他人的代码即地狱”。我相信：“不明白我自己的代码才是地狱。”而回调正是肇事者之一。</p>
+<h3 id="嵌套-链接的回调" tabindex="-1"><a class="header-anchor" href="#嵌套-链接的回调" aria-hidden="true">#</a> 嵌套/链接的回调</h3>
+<p>考虑下面的代码：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token function">listen</span><span class="token punctuation">(</span><span class="token string">"click"</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token function">handler</span><span class="token punctuation">(</span><span class="token parameter">evt</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token function">request</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">ajax</span><span class="token punctuation">(</span><span class="token string">"http://some.url.1"</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token function">response</span><span class="token punctuation">(</span><span class="token parameter">text</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>text <span class="token operator">==</span> <span class="token string">"hello"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">handler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>text <span class="token operator">==</span> <span class="token string">"world"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">request</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>你很可能一眼就能认出这样的代码。我们得到了三个嵌套在一起的函数链，每一个函数都代表异步序列（任务，“进程”）的一个步骤。</p>
+<p>这样的代码常被称为“回调地狱（callback hell）”，有时也被称为“末日金字塔（pyramid of doom）”（由于嵌套的缩进使它看起来像一个放倒的三角形）。</p>
+<p>但是“回调地狱”实际上与嵌套/缩进几乎无关。它是一个深刻得多的问题。我们将继续在本章剩下的部分看到它为什么和如何成为一个问题。</p>
+<p>首先，我们等待“click”事件，然后我们等待定时器触发，然后我们等待 Ajax 应答回来，就在这时它可能会将所有这些再做一遍。</p>
+<p>猛地一看，这段代码的异步性质可能看起来与顺序的大脑规划相匹配。</p>
+<p>首先（<em>现在</em>），我们：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token function">listen</span><span class="token punctuation">(</span> <span class="token string">".."</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token function">handler</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">.</span><span class="token punctuation">.</span></span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	<span class="token comment">// ..</span>
+<span class="token punctuation">}</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><em>稍后</em>，我们：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token function">setTimeout</span><span class="token punctuation">(</span> <span class="token keyword">function</span> <span class="token function">request</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">.</span><span class="token punctuation">.</span></span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	<span class="token comment">// ..</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">)</span> <span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>再 <em>稍后</em>，我们：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token function">ajax</span><span class="token punctuation">(</span> <span class="token string">".."</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token function">response</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">.</span><span class="token punctuation">.</span></span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	<span class="token comment">// ..</span>
+<span class="token punctuation">}</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>最后（最 <em>稍后</em>），我们：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// ..</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">else</span> <span class="token punctuation">.</span><span class="token punctuation">.</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>不过用这样的方式线性推导这段代码有几个问题。</p>
+<p>首先，这个例子中我们的步骤在一条顺序的线上（1，2，3，和 4……）是一个巧合。在真实的异步 JS 程序中，经常会有很多噪音把事情搞乱，在我们从一个函数跳到下一个函数时不得不在大脑中把这些噪音快速地演练一遍。理解这样满载回调的异步流程不是不可能，但绝不自然或容易，即使是经历了很多练习后。</p>
+<p>而且，有些更深层的，只是在这段代码中不明显的东西搞错了。让我们建立另一个场景（假想代码）来展示它：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token function">doA</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token function">doB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">doC</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">doD</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">doE</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">doF</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>虽然根据经验你将正确地指出这些操作的真实顺序，但我打赌它第一眼看上去有些使人糊涂，而且需要一些协调的思维周期才能搞明白。这些操作将会以这种顺序发生：</p>
+<ul>
+<li><code v-pre>doA()</code></li>
+<li><code v-pre>doF()</code></li>
+<li><code v-pre>doB()</code></li>
+<li><code v-pre>doC()</code></li>
+<li><code v-pre>doE()</code></li>
+<li><code v-pre>doD()</code></li>
+</ul>
+<p>你是在第一次浏览这段代码就看明白的吗？</p>
+<p>好吧，你们肯定有些人在想我在函数的命名上不公平，故意引导你误入歧途。我发誓我只是按照从上到下出现的顺序命名的。不过让我再试一次：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token function">doA</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token function">doC</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">doD</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">doF</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">doE</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">doB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>现在，我以他们实际执行的顺序用字母命名了。但我依然要打赌，即便是现在对这个场景有经验的情况下，大多数读者追踪<code v-pre>A -&gt; B -&gt; C -&gt; D -&gt; E -&gt; F</code>的顺序并不是自然而然的。你的眼睛肯定在这段代码中上上下下跳了许多次，对吧？</p>
+<p>就算它对你来说都是自然的，这里依然还有一个可能肆虐的灾难。你能发现它是什么吗？</p>
+<p>如果<code v-pre>doA(..)</code>或<code v-pre>doD(..)</code>实际上不是如我们明显地假设的那样，不是异步的呢？嗯，现在顺序不同了。如果它们都是同步的（也许仅仅有时是这样，根据当时程序所处的条件而定），现在的顺序是<code v-pre>A -&gt; C -&gt; D -&gt; F -&gt; E -&gt; B</code>。</p>
+<p>你在背景中隐约听到的声音，正是成千上万双手掩面的 JS 开发者的叹息。</p>
+<p>嵌套是问题吗？是它使追踪异步流程变得这么困难吗？当然，有一部分是。</p>
+<p>但是让我不用嵌套重写一遍前面事件/超时/Ajax 嵌套的例子：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token function">listen</span><span class="token punctuation">(</span><span class="token string">"click"</span><span class="token punctuation">,</span> handler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">handler</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token function">setTimeout</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">request</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token function">ajax</span><span class="token punctuation">(</span><span class="token string">"http://some.url.1"</span><span class="token punctuation">,</span> response<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">response</span><span class="token punctuation">(</span><span class="token parameter">text</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>text <span class="token operator">==</span> <span class="token string">"hello"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">handler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>text <span class="token operator">==</span> <span class="token string">"world"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">request</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>这样的代码组织形式几乎看不出来有前一种形式的嵌套/缩进困境，但它的每一处依然容易受到“回调地狱”的影响。为什么呢？</p>
+<p>当我们线性地（顺序地）推理这段代码，我们不得不从一个函数跳到下一个函数，再跳到下一个函数，并在代码中弹来弹去以“看到”顺序流。并且要记住，这个简化的代码风格是某种最佳情况。我们都知道真实的 JS 程序代码经常更加神奇地错综复杂，使这样量级的顺序推理更加困难。</p>
+<p>另一件需要注意的事是：为了将第 2，3，4 步链接在一起使他们相继发生，回调独自给我们的启示是将第 2 步硬编码在第 1 步中，将第 3 步硬编码在第 2 步中，将第 4 步硬编码在第 3 步中，如此继续。硬编码不一定是一件坏事，如果第 2 步应当总是在第 3 步之前真的是一个固定条件。</p>
+<p>不过硬编码绝对会使代码变得更脆弱，因为它不考虑任何可能使在步骤前行的过程中出现偏差的异常情况。举个例子，如果第 2 步失败了，第 3 步永远不会到达，第 2 步也不会重试，或者移动到一个错误处理流程上，等等。</p>
+<p>所有这些问题你都 <em>可以</em> 手动硬编码在每一步中，但那样的代码总是重复性的，而且不能在其他步骤或你程序的其他异步流程中复用。</p>
+<p>即便我们的大脑可能以顺序的方式规划一系列任务（这个，然后这个，然后这个），但我们大脑运行的事件的性质，使恢复/重试/分流这样的流程控制几乎毫不费力。如果你出去购物，而且你发现你把购物单忘在家里了，这并不会因为你没有提前计划这种情况而结束这一天。你的大脑会很容易地绕过这个小问题：你回家，取购物单，然后回头去商店。</p>
+<p>但是手动硬编码的回调（甚至带有硬编码的错误处理）的脆弱本性通常不那么优雅。一旦你最终指明了（也就是提前规划好了）所有各种可能性/路径，代码就会变得如此复杂以至于几乎不能维护或更新。</p>
+<p><strong>这</strong> 才是“回调地狱”想表达的！嵌套/缩进基本上一个余兴表演，转移注意力的东西。</p>
+<p>如果以上这些还不够，我们还没有触及两个或更多这些回调延续的链条 <em>同时</em> 发生会怎么样，或者当第三步分叉成为带有大门或门闩的“并行”回调，或者……我的天哪，我脑子疼，你呢？</p>
+<p>你抓住这里的重点了吗？我们顺序的，阻塞的大脑规划行为和面向回调的异步代码不能很好地匹配。这就是需要清楚地阐明的关于回调的首要缺陷：它们在代码中表达异步的方式，是需要我们的大脑不得不斗争才能保持一致的。</p>
+<h2 id="信任问题" tabindex="-1"><a class="header-anchor" href="#信任问题" aria-hidden="true">#</a> 信任问题</h2>
+<p>在顺序的大脑规划和 JS 代码中回调驱动的异步处理间的不匹配只是关于回调的问题的一部分。还有一些更深刻的问题值得担忧。</p>
+<p>让我们再一次重温这个概念——回调函数是我们程序的延续（也就是程序的第二部分）：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token comment">// A</span>
+<span class="token function">ajax</span><span class="token punctuation">(</span> <span class="token string">".."</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">.</span><span class="token punctuation">.</span></span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	<span class="token comment">// C</span>
+<span class="token punctuation">}</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// B</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><code v-pre>// A</code>和<code v-pre>// B</code><em>现在</em> 发生，在 JS 主程序的直接控制之下。但是<code v-pre>// C</code>被推迟到 <em>稍后</em> 再发生，并且在另一部分的控制之下——这里是<code v-pre>ajax(..)</code>函数。在基本的感觉上，这样的控制交接一般不会让程序产生很多问题。</p>
+<p>但是不要被这种控制切换不是什么大事的罕见情况欺骗了。事实上，它是回调驱动的设计的最可怕的（也是最微妙的）问题。这个问题围绕着一个想法展开：有时<code v-pre>ajax(..)</code>（或者说你向之提交回调的部分）不是你写的函数，或者不是你可以直接控制的函数。很多时候它是一个由第三方提供的工具。</p>
+<p>当你把你程序的一部分拿出来并把它执行的控制权移交给另一个第三方时，我们称这种情况为“控制倒转”。在你的代码和第三方工具之间有一个没有明言的“契约”——一组你期望被维护的东西。</p>
+<h3 id="五个回调的故事" tabindex="-1"><a class="header-anchor" href="#五个回调的故事" aria-hidden="true">#</a> 五个回调的故事</h3>
+<p>为什么这件事情很重要可能不是那么明显。让我们来构建一个夸张的场景来生动地描绘一下信任危机。</p>
+<p>想象你是一个开发者，正在建造一个贩卖昂贵电视的网站的结算系统。你已经将结算系统的各种页面顺利地制造完成。在最后一个页面，当用户点解“确定”购买电视时，你需要调用一个第三方函数（假如由一个跟踪分析公司提供），以便使这笔交易能够被追踪。</p>
+<p>你注意到它们提供的是某种异步追踪工具，也许是为了最佳的性能，这意味着你需要传递一个回调函数。在你传入的这个程序的延续中，有你最后的代码——划客人的信用卡并显示一个感谢页面。</p>
+<p>这段代码可能看起来像这样：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code>analytics<span class="token punctuation">.</span><span class="token function">trackPurchase</span><span class="token punctuation">(</span>purchaseData<span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token function">chargeCreditCard</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">displayThankyouPage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>足够简单，对吧？你写好代码，测试它，一切正常，然后你把它部署到生产环境。大家都很开心！</p>
+<p>6 个月过去了，没有任何问题。你几乎已经忘了你曾写过的代码。一天早上，工作之前你先在咖啡店坐坐，悠闲地享用着你的拿铁，直到你接到老板慌张的电话要求你立即扔掉咖啡并冲进办公室。</p>
+<p>当你到达时，你发现一位高端客户为了买同一台电视信用卡被划了 5 次，而且可以理解，他不高兴。客服已经道了歉并开始办理退款。但你的老板要求知道这是怎么发生的。“我们没有测试过这样的情况吗！？”</p>
+<p>你甚至不记得你写过的代码了。但你还是往回挖掘试着找出是什么出错了。</p>
+<p>在分析过一些日志之后，你得出的结论是，唯一的解释是分析工具不知怎么的，由于某些原因，将你的回调函数调用了 5 次而非一次。他们的文档中没有任何东西提到此事。</p>
+<p>十分令人沮丧，你联系了客户支持，当然他们和你一样惊讶。他们同意将此事向上提交至开发者，并许诺给你回复。第二天，你收到一封很长的邮件解释他们发现了什么，然后你将它转发给了你的老板。</p>
+<p>看起来，分析公司的开发者曾经制作了一些实验性的代码，在一定条件下，将会每秒重试一次收到的回调，在超时之前共计 5 秒。他们从没想要把这部分推到生产环境，但不知怎地他们这样做了，而且他们感到十分难堪而且抱歉。然后是许多他们如何定位错误的细节，和他们将要如何做以保证此事不再发生。等等，等等。</p>
+<p>后来呢？</p>
+<p>你找你的老板谈了此事，但是他对事情的状态不是感觉特别舒服。他坚持，而且你也勉强地同意，你不能再相信 <em>他们</em> 了（咬到你的东西），而你将需要指出如何保护放出的代码，使它们不再受这样的漏洞威胁。</p>
+<p>修修补补之后，你实现了一些如下的特殊逻辑代码，团队中的每个人看起来都挺喜欢：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token keyword">var</span> tracked <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+
+analytics<span class="token punctuation">.</span><span class="token function">trackPurchase</span><span class="token punctuation">(</span>purchaseData<span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tracked<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    tracked <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token function">chargeCreditCard</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">displayThankyouPage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><strong>注意：</strong> 对读过第一章的你来说这应当很熟悉，因为我们实质上创建了一个门闩来处理我们的回调被并发调用多次的情况。</p>
+<p>但一个 QA 的工程师问，“如果他们没调你的回调怎么办？” 噢。谁也没想过。</p>
+<p>你开始布下天罗地网，考虑在他们调用你的回调时所有出错的可能性。这里是你得到的分析工具可能不正常运行的方式的大致列表：</p>
+<ul>
+<li>调用回调过早（在它开始追踪之前）</li>
+<li>调用回调过晚 (或不调)</li>
+<li>调用回调太少或太多次（就像你遇到的问题！）</li>
+<li>没能向你的回调传递必要的环境/参数</li>
+<li>吞掉了可能发生的错误/异常</li>
+<li>...</li>
+</ul>
+<p>这感觉像是一个麻烦清单，因为它就是。你可能慢慢开始理解，你将要不得不为 <strong>每一个传递到你不能信任的工具中的回调</strong> 都创造一大堆的特殊逻辑。</p>
+<p>现在你更全面地理解了“回调地狱”有多地狱。</p>
+<h3 id="不仅是其他人的代码" tabindex="-1"><a class="header-anchor" href="#不仅是其他人的代码" aria-hidden="true">#</a> 不仅是其他人的代码</h3>
+<p>现在有些人可能会怀疑事情到底是不是如我所宣扬的这么大条。也许你根本就不和真正的第三方工具互动。也许你用的是进行了版本控制的 API，或者自己保管的库，因此它的行为不会在你不知晓的情况下改变。</p>
+<p>那么，好好思考这个问题：你能 <em>真正</em> 信任你理论上控制（在你的代码库中）的工具吗？</p>
+<p>这样考虑：我们大多数人都同意，至少在某个区间内我们应当带着一些防御性的输入参数检查制造我们自己的内部函数，来减少/防止以外的问题。</p>
+<p>过于相信输入：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token keyword">function</span> <span class="token function">addNumbers</span><span class="token punctuation">(</span><span class="token parameter">x<span class="token punctuation">,</span> y</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// + 操作符使用强制转换重载为字符串连接</span>
+  <span class="token comment">// 所以根据传入参数的不同，这个操作不是严格的安全。</span>
+  <span class="token keyword">return</span> x <span class="token operator">+</span> y<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">addNumbers</span><span class="token punctuation">(</span><span class="token number">21</span><span class="token punctuation">,</span> <span class="token number">21</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 42</span>
+<span class="token function">addNumbers</span><span class="token punctuation">(</span><span class="token number">21</span><span class="token punctuation">,</span> <span class="token string">"21"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// "2121"</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>防御不信任的输入：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token keyword">function</span> <span class="token function">addNumbers</span><span class="token punctuation">(</span><span class="token parameter">x<span class="token punctuation">,</span> y</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// 保证数字输入</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> x <span class="token operator">!=</span> <span class="token string">"number"</span> <span class="token operator">||</span> <span class="token keyword">typeof</span> y <span class="token operator">!=</span> <span class="token string">"number"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token function">Error</span><span class="token punctuation">(</span><span class="token string">"Bad parameters"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// 如果我们到达这里，+ 就可以安全地做数字加法</span>
+  <span class="token keyword">return</span> x <span class="token operator">+</span> y<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">addNumbers</span><span class="token punctuation">(</span><span class="token number">21</span><span class="token punctuation">,</span> <span class="token number">21</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 42</span>
+<span class="token function">addNumbers</span><span class="token punctuation">(</span><span class="token number">21</span><span class="token punctuation">,</span> <span class="token string">"21"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Error: "Bad parameters"</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>或者也许依然安全但更友好：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token keyword">function</span> <span class="token function">addNumbers</span><span class="token punctuation">(</span><span class="token parameter">x<span class="token punctuation">,</span> y</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// 保证数字输入</span>
+  x <span class="token operator">=</span> <span class="token function">Number</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  y <span class="token operator">=</span> <span class="token function">Number</span><span class="token punctuation">(</span>y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// + 将会安全地执行数字加法</span>
+  <span class="token keyword">return</span> x <span class="token operator">+</span> y<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">addNumbers</span><span class="token punctuation">(</span><span class="token number">21</span><span class="token punctuation">,</span> <span class="token number">21</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 42</span>
+<span class="token function">addNumbers</span><span class="token punctuation">(</span><span class="token number">21</span><span class="token punctuation">,</span> <span class="token string">"21"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 42</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>不管你怎么做，这类函数参数的检查/规范化是相当常见的，即便是我们理论上完全信任的代码。用一个粗俗的说法，编程好像是地缘政治学的“信任但验证”原则的等价物。</p>
+<p>那么，这不是要推论出我们应当对异步函数回调的编写做相同的事，而且不仅是针对真正的外部代码，甚至要对一般认为是“在我们控制之下”的代码？<strong>我们当然应该。</strong></p>
+<p>但是回调没有给我们提供任何协助。我们不得不自己构建所有的装置，而且这通常最终成为许多我们要在每个异步回调中重复的模板/负担。</p>
+<p>有关于回调的最麻烦的问题就是 <em>控制反转</em> 导致所有这些信任完全崩溃。</p>
+<p>如果你有代码用到回调，特别是但不特指第三方工具，而且你还没有为所有这些 <em>控制反转</em> 的信任问题实施某些缓和逻辑，那么你的代码现在就 <em>有</em> bug，虽然它们还没咬到你。将来的 bug 依然是 bug。</p>
+<p>确实是地狱。</p>
+<h2 id="尝试拯救回调" tabindex="-1"><a class="header-anchor" href="#尝试拯救回调" aria-hidden="true">#</a> 尝试拯救回调</h2>
+<p>有几种回调的设计试图解决一些（不是全部！）我们刚才看到的信任问题。这是一种将回调模式从它自己的崩溃中拯救出来的勇敢，但注定失败的努力。</p>
+<p>举个例子，为了更平静地处理错误，有些 API 设计提供了分离的回调（一个用作成功的通知，一个用作错误的通知）：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token keyword">function</span> <span class="token function">success</span><span class="token punctuation">(</span><span class="token parameter">data</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">failure</span><span class="token punctuation">(</span><span class="token parameter">err</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">ajax</span><span class="token punctuation">(</span><span class="token string">"http://some.url.1"</span><span class="token punctuation">,</span> success<span class="token punctuation">,</span> failure<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>在这种设计的 API 中，<code v-pre>failure()</code>错误处理器通常是可选的，而且如果不提供的话它会假定你想让错误被吞掉。呃。</p>
+<p><strong>注意：</strong> ES6 的 Promises 的 API 使用的就是这种分离回调设计。我们将在下一章中详尽地讨论 ES6 的 Promises。</p>
+<p>另一种常见的回调设计模式称为“错误优先风格”（有时称为“Node 风格”，因为它几乎在所有的 Node.js 的 API 中作为惯例使用），一个回调的第一个参数为一个错误对象保留（如果有的话）。如果成功，这个参数将会是空/falsy（而其他后续的参数将是成功的数据），但如果出现了错误的结果，这第一个参数就会被设置/truthy（而且通常没有其他东西会被传递了）：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token keyword">function</span> <span class="token function">response</span><span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> data</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// 有错？</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token comment">// 否则，认为成功</span>
+  <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">ajax</span><span class="token punctuation">(</span><span class="token string">"http://some.url.1"</span><span class="token punctuation">,</span> response<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>这两种方法都有几件事情应当注意。</p>
+<p>首先，它们没有像看起来那样真正解决主要的信任问题。在这两个回调中没有关于防止或过滤意外的重复调用的东西。而且，事情现在更糟糕了，因为你可能同时得到成功和失败信号，或者都得不到，你仍然不得不围绕着这两种情况写代码。</p>
+<p>还有，不要忘了这样的事实：虽然它们是你可以引用的标准模式，但它们绝对更加繁冗，而且是不太可能复用的模板代码，所以你将会对在你应用程序的每一个回调中敲出它们感到厌倦。</p>
+<p>回调从不被调用的信任问题怎么解决？如果这要紧（而且它可能应当要紧！），你可能需要设置一个超时来取消事件。你可以制作一个工具来帮你：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token keyword">function</span> <span class="token function">timeoutify</span><span class="token punctuation">(</span><span class="token parameter">fn<span class="token punctuation">,</span> delay</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> intv <span class="token operator">=</span> <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    intv <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token function">fn</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"Timeout!"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> delay<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 超时还没有发生？</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>intv<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">clearTimeout</span><span class="token punctuation">(</span>intv<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token function">fn</span><span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token keyword">null</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>arguments<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>这是你如何使用它：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token comment">// 使用“错误优先”风格的回调设计</span>
+<span class="token keyword">function</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> data</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">ajax</span><span class="token punctuation">(</span><span class="token string">"http://some.url.1"</span><span class="token punctuation">,</span> <span class="token function">timeoutify</span><span class="token punctuation">(</span>foo<span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>另一个信任问题是被调用的“过早”。在应用程序规范上讲，这可能涉及在某些重要的任务完成之前被调用。但更一般地，在那些即可以 <em>现在</em>（同步地），也可以在 <em>稍后</em>（异步地）调用你提供的回调的工具中这个问题更明显。</p>
+<p>这种围绕着同步或异步行为的不确定性，几乎总是导致非常难追踪的 Bug。在某些圈子中，一个名叫 Zalgo 的可以导致人精神错乱的虚构怪物被用来描述这种同步/异步的噩梦。经常能听到人们喊“别放出 Zalgo！”，而且它引出了一个非常响亮的建议：总是异步地调用回调，即便它是“立即”在事件轮询的下一个迭代中，这样所有的回调都是可预见的异步。</p>
+<p><strong>注意：</strong> 更多关于 Zalgo 的信息，参见 Oren Golan 的“Don't Release Zalgo!（不要释放 Zalgo！）”（ https://github.com/oren/oren.github.io/blob/master/posts/zalgo.md ）和 Isaac Z. Schlueter 的“Designing APIs for Asynchrony（异步 API 设计）”（ http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony ）。</p>
+<p>考虑下面的代码：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token keyword">function</span> <span class="token function">result</span><span class="token punctuation">(</span><span class="token parameter">data</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+<span class="token function">ajax</span><span class="token punctuation">(</span><span class="token string">"..pre-cached-url.."</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+a<span class="token operator">++</span><span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>这段代码是打印<code v-pre>0</code>（同步回调调用）还是打印<code v-pre>1</code>（异步回调调用）？这……要看情况。</p>
+<p>你可以看到 Zalgo 的不可预见性能有多快地威胁你的 JS 程序。所以听起来傻呼呼的“别放出 Zalgo”实际上是一个不可思议地常见且实在的建议——总是保持异步。</p>
+<p>如果你不知道当前的 API 是否会总是异步地执行呢？你可以制造一个像<code v-pre>asyncify(..)</code>这样的工具：</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token keyword">function</span> <span class="token function">asyncify</span><span class="token punctuation">(</span><span class="token parameter">fn</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> orig_fn <span class="token operator">=</span> fn<span class="token punctuation">,</span>
+    intv <span class="token operator">=</span> <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      intv <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>fn<span class="token punctuation">)</span> <span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  fn <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 触发太快，在`intv`计时器触发来</span>
+    <span class="token comment">// 表示异步回合已经过去之前？</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>intv<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      fn <span class="token operator">=</span> orig_fn<span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span>
+        orig_fn<span class="token punctuation">,</span>
+        <span class="token comment">// 将包装函数的`this`加入`bind(..)`调用的</span>
+        <span class="token comment">// 参数，同时currying其他所有的传入参数</span>
+        <span class="token punctuation">[</span><span class="token keyword">this</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>arguments<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">// 已经是异步</span>
+    <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      <span class="token comment">// 调用原版的函数</span>
+      <span class="token function">orig_fn</span><span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> arguments<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>你像这样使用<code v-pre>asyncify(..)</code>:</p>
+<div class="language-javascript ext-js line-numbers-mode"><pre v-pre class="language-javascript"><code><span class="token keyword">function</span> <span class="token function">result</span><span class="token punctuation">(</span><span class="token parameter">data</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+<span class="token function">ajax</span><span class="token punctuation">(</span><span class="token string">"..pre-cached-url.."</span><span class="token punctuation">,</span> <span class="token function">asyncify</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+a<span class="token operator">++</span><span class="token punctuation">;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>不管 Ajax 请求是由于存在于缓存中而解析为立即调用回调，还是它必须走过网线去取得数据而异步地稍后完成，这段代码总是输出<code v-pre>1</code>而不是<code v-pre>0</code>——<code v-pre>result(..)</code>总是被异步地调用，这意味着<code v-pre>a++</code>有机会在<code v-pre>result(..)</code>之前运行。</p>
+<p>噢耶，又一个信任问题被“解决了”！但它很低效，而且又有更多臃肿的模板代码让你的项目变得沉重。</p>
+<p>这只是关于回调一遍又一遍地发生的故事。它们几乎可以做任何你想做的事，但你不得不努力工作来达到目的，而且大多数时候这种努力比你应当在推理这样的代码上所付出的多得多。</p>
+<p>你可能发现自己希望有一些内建的 API 或语言机制来解决这些问题。终于 ES6 带着一个伟大的答案到来了，所以继续读下去！</p>
+<h2 id="复习" tabindex="-1"><a class="header-anchor" href="#复习" aria-hidden="true">#</a> 复习</h2>
+<p>回调是 JS 中异步的基础单位。但是随着 JS 的成熟，它们对于异步编程的演化趋势来讲显得不够。</p>
+<p>首先，我们的大脑用顺序的，阻塞的，单线程的语义方式规划事情，但是回调使用非线性，非顺序的方式表达异步流程，这使我们正确推理这样的代码变得非常困难。不好推理的代码是导致不好的 Bug 的不好的代码。</p>
+<p>我们需要一个种方法，以更同步化，顺序化，阻塞的方式来表达异步，正如我们的大脑那样。</p>
+<p>第二，而且是更重要的，回调遭受着 <em>控制反转</em> 的蹂躏，它们隐含地将控制权交给第三方（通常第三方工具不受你控制！）来调用你程序的 <em>延续</em>。这种控制权的转移使我们得到一张信任问题的令人不安的列表，比如回调是否会比我们期望的被调用更多次。</p>
+<p>制造特殊的逻辑来解决这些信任问题是可能的，但是它比它应有的难度高多了，还会产生更笨重和更难维护的代码，而且在 bug 实际咬到你的时候代码会显得在这些危险上被保护的不够。</p>
+<p>我们需要一个 <strong>所有这些信任问题</strong> 的一般化解决方案。一个可以被所有我们制造的回调复用，而且没有多余的模板代码负担的方案。</p>
+<p>我们需要比回调更好的东西。目前为止它们做的不错，但 JavaScript 的 <em>未来</em> 要求更精巧和强大的异步模式。本书的后续章节将会深入这些新兴的发展变化。</p>
+</div></template>
+
+
