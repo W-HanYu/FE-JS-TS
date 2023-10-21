@@ -4,8 +4,5 @@
   },
   "scripts": {
     "fc": "node formateGit.js"
-  },
-  "devDependencies": {
-    "gh-pages": "^5.0.0"
   }
 }
