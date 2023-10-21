@@ -21,7 +21,7 @@ jobs:
 
       # 生成静态文件
       - name: Build
-        run: cd vuepress && yarn deploy
+        run: sh deploy.sh
 
       # 部署到 GitHub Pages
       - name: Deploy
