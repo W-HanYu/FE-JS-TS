@@ -7,8 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "vuepress dev .",
-    "build": "vuepress build .",
-    "deploy": "vuepress build vuepress"
+    "build": "vuepress build ."
   },
   "dependencies": {
     "@type-challenges/utils": "^0.1.1",
