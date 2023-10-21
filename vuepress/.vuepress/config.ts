@@ -14,7 +14,7 @@ export default defineUserConfig({
     docsBranch: "master",
     docsDir: "example",
     lastUpdatedText: "",
-    subSidebar: 'auto',
+    subSidebar: "auto",
     commentConfig: {
       type: "valine",
       options: {
@@ -185,6 +185,12 @@ export default defineUserConfig({
           ],
         },
       ],
+      "/docs/ts-type-gymnastics/": [
+        {
+          text: "TypeScript 体操训练营",
+          children: ["Routine1:pattern-matching-for-extraction"],
+        },
+      ],
     },
     navbar: [
       { text: "首页", link: "/" },
@@ -205,7 +211,12 @@ export default defineUserConfig({
         children: [
           { text: "基础篇", link: "/docs/you-dont-know-ts/base-1" },
           { text: "进阶篇", link: "/docs/you-dont-know-ts/Advanced-1" },
+          { text: "扩展阅读篇", link: "/" },
         ],
+      },
+      {
+        text: "TS类型体操训练营",
+        link: "/docs/ts-type-gymnastics/Routine1:pattern-matching-for-extraction",
       },
       {
         text: "图解网络",
