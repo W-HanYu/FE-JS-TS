@@ -30,4 +30,4 @@ jobs:
         with:
           ACCESS_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           BRANCH: gh-pages
-          FOLDER: docs/.vuepress/dist
+          FOLDER: vuepress/docs/.vuepress/dist
