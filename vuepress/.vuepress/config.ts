@@ -2,9 +2,10 @@ import { defineUserConfig } from "vuepress";
 import recoTheme from "vuepress-theme-reco";
 
 export default defineUserConfig({
-  // base: "/FE-JS-TS/",
+  base: "/FE-JS-TS/",
   title: "FE-JS/TS系列",
   description: "Just playing around",
+  head: [["link", { rel: "icon", href: "./favicon.ico" }]],
   port: 8000,
   theme: recoTheme({
     style: "@vuepress-reco/style-default",

@@ -254,4 +254,3 @@ Func 和模式类型做匹配，提取返回值到通过 infer 声明的局部�
 <img src="./assets/3.2.GetReturnRes.png" width = "400px">
 
 [试一哈](https://www.typescriptlang.org/play?ssl=2&ssc=75&pln=1&pc=1#code/C4TwDgpgBA4hwCV4FcBOA7AKuCAeAYsugMZQQAewE6AJgM5SEnACWA9ugHxQC8UAUFCGMipClVoMAFADo5AQ1QBzOgC556EAG0AugEpe3FugBmEVFCTA0WHEID8llBmyQoqqOggA3c-3+gbkrwVjZIDHxwiM62kLhS6PIAthCqdMCoxkoANPLBqujISQBG5no8nOmZ6EqcQA)
-
