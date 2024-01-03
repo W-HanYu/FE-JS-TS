@@ -5,8 +5,7 @@ permissions: read-all
 # 触发条件：在 push 到 main/master 分支后，新的 Github 项目 应该都是 main，而之前的项目一般都是 master
 on:
   push:
-    branches:
-      - master
+    branches: [master]
 
 # 任务
 jobs:
@@ -16,12 +15,21 @@ jobs:
     steps:
       # 拉取代码
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          # fetch all commits to get last updated time or other git log info
+          fetch-depth: 0
 
-      # 生成静态文件
-      - name: Build
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          # choose node.js version to use
+          node-version: 18
+          # cache deps for pnpm
+          cache: npm
+
+      # run build script
+      - name: Build VuePress site
         run: sh deploy.sh
 
       # 部署到 GitHub Pages
@@ -30,4 +38,4 @@ jobs:
         with:
           ACCESS_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           BRANCH: gh-pages
-          FOLDER: vuepress/docs/.vuepress/dist
+          FOLDER: docs/.vuepress/dist
