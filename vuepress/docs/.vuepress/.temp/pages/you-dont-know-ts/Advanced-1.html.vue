@@ -23,15 +23,15 @@ or
 <span class="token keyword">let</span> myIdentify<span class="token operator">:</span> GenericIdentifyFn <span class="token operator">=</span> identify
 
 </code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_1-2-keyof-类型操作符" tabindex="-1"><a class="header-anchor" href="#_1-2-keyof-类型操作符" aria-hidden="true">#</a> 1.2 keyof 类型操作符</h3>
-<p>TypeScript 允许我们遍历某种类型的属性，并通过 keyof 操作符提取其属性的名称。keyof 操作符是在 TypeScript 2.1 版本引入的，该操作符可以用于获取某种类型的所有键，其返回类型是联合类型。</p>
+<p>TypeScript 允许我们遍历某种类型的属性，并通过 keyof 操作符提取其属性的名称。keyof 操作符是在 TypeScript 2.1 版本引入的，该操作符可以用于获取某种类型的所有键，其<code v-pre>返回类型是联合类型</code>。</p>
 <h4 id="keyof-介绍" tabindex="-1"><a class="header-anchor" href="#keyof-介绍" aria-hidden="true">#</a> keyof 介绍</h4>
 <ul>
 <li>接口</li>
 </ul>
 <div class="language-typescript ext-ts line-numbers-mode"><pre v-pre class="language-typescript"><code><span class="token keyword">interface</span> <span class="token class-name">Person</span><span class="token punctuation">{</span>
-name<span class="token operator">:</span><span class="token builtin">string</span><span class="token punctuation">;</span>
-age<span class="token operator">:</span><span class="token builtin">number</span><span class="token punctuation">;</span>
-location<span class="token operator">:</span><span class="token builtin">string</span><span class="token punctuation">;</span>
+  name<span class="token operator">:</span><span class="token builtin">string</span><span class="token punctuation">;</span>
+  age<span class="token operator">:</span><span class="token builtin">number</span><span class="token punctuation">;</span>
+  location<span class="token operator">:</span><span class="token builtin">string</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 <span class="token keyword">type</span> <span class="token class-name"><span class="token constant">K1</span></span><span class="token operator">=</span><span class="token keyword">keyof</span> Person<span class="token punctuation">;</span><span class="token comment">//"name"| "age"|"localtion"</span>
 <span class="token keyword">type</span> <span class="token class-name"><span class="token constant">K2</span></span><span class="token operator">=</span><span class="token keyword">keyof</span> Person<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token comment">// numner|"length"|"push"....</span>
