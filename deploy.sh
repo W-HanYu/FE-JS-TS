@@ -5,7 +5,7 @@ set -e
 
 # 生成静态文件
 cd vuepress/
-yarn build
+yarn &&  yarn build
 
 # 进入生成的文件夹
 cd docs/.vuepress/dist
