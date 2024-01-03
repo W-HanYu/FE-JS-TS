@@ -112,6 +112,10 @@ export default defineUserConfig({
             "Advanced-5",
           ],
         },
+        {
+          text: "提高卷：拓展阅读",
+          children: ["Extended-article-1"],
+        },
       ],
       "/docs/graphicalNetwork/": [
         {
@@ -212,7 +216,10 @@ export default defineUserConfig({
         children: [
           { text: "基础篇", link: "/docs/you-dont-know-ts/base-1" },
           { text: "进阶篇", link: "/docs/you-dont-know-ts/Advanced-1" },
-          { text: "扩展阅读篇", link: "/" },
+          {
+            text: "扩展阅读篇",
+            link: "/docs/you-dont-know-ts/Extended-article-1",
+          },
         ],
       },
       {
