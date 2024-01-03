@@ -8,7 +8,7 @@ cd vuepress/
 npm install &&  npm run build
 
 # 进入生成的文件夹
-cd docs/.vuepress/dist
+cd vuepress/docs/.vuepress/dist
 
 # 如果是发布到自定义域名
 # echo 'www.example.com' > CNAME
