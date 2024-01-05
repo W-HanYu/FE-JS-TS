@@ -3,7 +3,6 @@ on:
   #监听push操作
   push:
     branches:
-      # mian分支，你也可以改成其他分支
       - master
 
 jobs:
