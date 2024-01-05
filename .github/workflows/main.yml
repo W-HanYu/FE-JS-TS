@@ -1,41 +1,24 @@
-# name 可以自定义
-name: Deploy GitHub Pages
-permissions: read-all
+name: deploy
 
-# 触发条件：在 push 到 main/master 分支后，新的 Github 项目 应该都是 main，而之前的项目一般都是 master
 on:
   push:
     branches: [master]
 
-# 任务
 jobs:
-  build-and-deploy:
-    # 服务器环境：最新版 Ubuntu
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      # 拉取代码
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          # fetch all commits to get last updated time or other git log info
-          fetch-depth: 0
+      - uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          # choose node.js version to use
-          node-version: 18
-          # cache deps for pnpm
-          cache: npm
 
-      # run build script
-      - name: Build VuePress site
-        run: sh deploy.sh
+      - name: Install and Build
+        run: |
+          yarn install
+          cd vuepress && yarn build
 
-      # 部署到 GitHub Pages
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+      - name: Deploy to github pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          ACCESS_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          BRANCH: gh-pages
-          FOLDER: docs/.vuepress/dist
+          github_token: ${{ secrets.ACCESS_TOKEN }}
+          commit_message: deploy to github pages
+          publish_dir: ./vuepress/.vuepress/dist
