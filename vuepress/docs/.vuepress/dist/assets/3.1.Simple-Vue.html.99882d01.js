@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-2cd9a7de","path":"/challenge/3.1.Simple-Vue.html","title":"","lang":"en-US","frontmatter":{},"excerpt":"","headers":[],"git":{"updatedTime":1677763644000,"contributors":[{"name":"\u738B\u6D9B","email":"wangtao@aimc.online","commits":1}]},"filePathRelative":"challenge/3.1.Simple-Vue.md"}');export{e as data};

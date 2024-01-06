@@ -2,7 +2,7 @@
 <p><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*NXvlzFcY5a50_wf137qjjQ.jpeg" alt="1"></p>
 <p>欢迎来到掌握 TypeScript 系列。本系列将以动画的形式介绍 TypeScript 的核心知识和技术。一起来学习吧!</p>
 <p>当你第一次看到 TypeScript 泛型中的 <code v-pre>T</code> 时，是不是觉得很奇怪？</p>
-<p><img src="@source/assets/article/01.gif" alt=""></p>
+<!-- ![](../assets/article/01.gif) -->
 <p>该公式称为泛型类型参数，它是我们希望传递给恒等函数的类型占位符。</p>
 <p>就像传递参数一样，我们获取用户指定的实际类型并将其链接到参数类型和返回值类型。</p>
 <p><img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*58mhLNgQAejgD8p_S0UjNw.gif" alt=""></p>
