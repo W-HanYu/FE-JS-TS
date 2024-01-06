@@ -39,8 +39,6 @@ export const pagesData = {
   "v-5ba67166": () => import(/* webpackChunkName: "v-5ba67166" */"/Users/wangtao/my-own-project/FE-JS-TS/vuepress/docs/.vuepress/.temp/pages/challenge/2.5.turn-to-union.html.js").then(({ data }) => data),
   // path: /challenge/3.1.Simple-Vue.html
   "v-2cd9a7de": () => import(/* webpackChunkName: "v-2cd9a7de" */"/Users/wangtao/my-own-project/FE-JS-TS/vuepress/docs/.vuepress/.temp/pages/challenge/3.1.Simple-Vue.html.js").then(({ data }) => data),
-  // path: /others/donate.html
-  "v-6e626dd7": () => import(/* webpackChunkName: "v-6e626dd7" */"/Users/wangtao/my-own-project/FE-JS-TS/vuepress/docs/.vuepress/.temp/pages/others/donate.html.js").then(({ data }) => data),
   // path: /graphicalNetwork/basic-1.html
   "v-63d9fd62": () => import(/* webpackChunkName: "v-63d9fd62" */"/Users/wangtao/my-own-project/FE-JS-TS/vuepress/docs/.vuepress/.temp/pages/graphicalNetwork/basic-1.html.js").then(({ data }) => data),
   // path: /graphicalNetwork/basic-2.html
@@ -91,6 +89,8 @@ export const pagesData = {
   "v-5730c01c": () => import(/* webpackChunkName: "v-5730c01c" */"/Users/wangtao/my-own-project/FE-JS-TS/vuepress/docs/.vuepress/.temp/pages/graphicalNetwork/tcp-stream.html.js").then(({ data }) => data),
   // path: /graphicalNetwork/tcp-syn.html
   "v-15beaf18": () => import(/* webpackChunkName: "v-15beaf18" */"/Users/wangtao/my-own-project/FE-JS-TS/vuepress/docs/.vuepress/.temp/pages/graphicalNetwork/tcp-syn.html.js").then(({ data }) => data),
+  // path: /others/donate.html
+  "v-6e626dd7": () => import(/* webpackChunkName: "v-6e626dd7" */"/Users/wangtao/my-own-project/FE-JS-TS/vuepress/docs/.vuepress/.temp/pages/others/donate.html.js").then(({ data }) => data),
   // path: /ts-type-gymnastics/Routine1:pattern-matching-for-extraction.html
   "v-06140cbe": () => import(/* webpackChunkName: "v-06140cbe" */"/Users/wangtao/my-own-project/FE-JS-TS/vuepress/docs/.vuepress/.temp/pages/ts-type-gymnastics/Routine1:pattern-matching-for-extraction.html.js").then(({ data }) => data),
   // path: /you-dont-know-ts/Advanced-1.html

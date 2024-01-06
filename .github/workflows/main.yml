@@ -20,9 +20,8 @@ jobs:
         run: sh deploy.sh
 
       - name: Deploy to github pages
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.ACCESS_TOKEN }}
-          commit_message: deploy to github pages
+          commit_message: "deploy to github pages"
           publish_dir: "./vuepress/docs/.vuepress/dist/*"
-          BRANCH: gh-pages # 部署到的分支
