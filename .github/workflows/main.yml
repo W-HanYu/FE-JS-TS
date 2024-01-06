@@ -25,3 +25,4 @@ jobs:
           github_token: ${{ secrets.ACCESS_TOKEN }}
           commit_message: deploy to github pages
           publish_dir: "./vuepress/.vuepress/dist/*"
+          BRANCH: gh-pages # 部署到的分支
