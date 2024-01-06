@@ -37,11 +37,11 @@ customModule:
   buttons:
     - {
         text: 我要学习->,
-        link: "/docs/you-dont-know-js/volume-1/rollup-1.html",
+        link: "/FE-JS-TS/docs/you-dont-know-js/volume-1/rollup-1.html",
       }
     - {
         text: 实践练习,
-        link: "/docs/challenge/1.1.hello-world.html",
+        link: "/FE-JS-TS/docs/challenge/1.1.hello-world.html",
         type: "plain",
       }
   feature:
