@@ -11,7 +11,7 @@ export default defineUserConfig({
     style: "@vuepress-reco/style-default",
     logo: "/logo.png",
     author: "wangtao",
-    docsRepo: "",
+    docsRepo: "https://github.com/W-HanYu/FE-JS-TS.git",
     docsBranch: "master",
     docsDir: "example",
     lastUpdatedText: "",

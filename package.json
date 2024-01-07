@@ -3,6 +3,7 @@
     "@vuepress-reco/vuepress-plugin-comments": "^1.6.13"
   },
   "scripts": {
-    "fc": "node formateGit.js"
+    "fc": "node formateGit.js",
+    "build": "vuepress build ."
   }
 }
