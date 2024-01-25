@@ -8,7 +8,7 @@ cd vuepress
 yarn
 yarn build
 
-cd .vuepress/dist
+# cd .vuepress/dist
 
 
 # git init
