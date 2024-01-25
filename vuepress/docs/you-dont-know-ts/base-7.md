@@ -1,6 +1,6 @@
 ---
 title: 七、typescript 函数
-date: 2022/10/27
+date: '2022-10-27'
 ---
 
 ## 七、typescript 函数

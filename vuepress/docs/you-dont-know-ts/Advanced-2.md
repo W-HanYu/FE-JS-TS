@@ -1,6 +1,6 @@
 ---
 title: 第二章:Utility Type 实用类型
-date: 2023/05/29
+date: '2023-05-29'
 hideComments: false
 ---
 

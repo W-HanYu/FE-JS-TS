@@ -1,6 +1,6 @@
 ---
 title: 既然有 HTTP 协议，为什么还要有 WebSocket？
-date: 2023/06/08
+date: '2023-06-08'
 ---
 
 # 既然有 HTTP 协议，为什么还要有 WebSocket？

@@ -257,9 +257,9 @@ export default defineUserConfig({
           type: "text",
           content: `
           <ul>
-            <li>QQ群1：1037296104</li>
-            <li>QQ群2：1061561395</li>
-            <li>QQ群3：962687802</li>
+            <li>QQ群1：1453300745</li>
+            <li>QQ群2：1453300745</li>
+            <li>QQ群3：1453300745</li>
           </ul>`,
           style: "font-size: 12px;",
         },

@@ -1,6 +1,6 @@
 ---
 title: 附录A：与环境混合的JavaScript
-date: 2023/06/20
+date: '2023-06-20'
 ---
 
 # 附录A：与环境混合的JavaScript

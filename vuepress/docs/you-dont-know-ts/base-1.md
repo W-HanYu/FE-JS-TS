@@ -1,6 +1,6 @@
 ---
 title: 一、什么是Typescript
-date: 2022/11/2
+date: '2022-11-2'
 ---
 
 ## 一、什么是 typescript？

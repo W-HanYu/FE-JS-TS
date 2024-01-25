@@ -1,6 +1,6 @@
 ---
 title: 三、typescript 断言
-date: 2022/10/27
+date: '2022-10-27'
 ---
 
 ## 三、typescript 断言

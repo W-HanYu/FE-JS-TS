@@ -1,6 +1,6 @@
 ---
 title: 九、typescript 对象
-date: 2022/10/27
+date: '2022-10-27'
 ---
 
 ## 九、typescript 对象

@@ -1,6 +1,6 @@
 ---
 title: 十二、typescript 泛型
-date: 2022/10/27
+date: '2022-10-27'
 ---
 
 ## 十二、typescript 泛型

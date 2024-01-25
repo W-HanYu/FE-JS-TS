@@ -1,6 +1,6 @@
 ---
 title: 第3章 Object
-date: 2023/05/11
+date: '2023-05-11'
 ---
 
 # 第3章： Object

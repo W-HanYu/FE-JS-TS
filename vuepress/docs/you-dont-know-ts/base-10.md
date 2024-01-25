@@ -1,6 +1,6 @@
 ---
 title: 十、typescript 接口
-date: 2022/10/27
+date: '2022-10-27'
 ---
 
 ## 十、typescript 接口

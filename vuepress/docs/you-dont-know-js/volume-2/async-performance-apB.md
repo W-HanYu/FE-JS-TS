@@ -1,6 +1,6 @@
 ---
 title: 附录B:高级异步模式
-date: 2023/06/15
+date: '2023-06-15'
 hideComments: false
 ---
 

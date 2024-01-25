@@ -1,6 +1,6 @@
 ---
 title: 二、Typescript 基础类型
-date: 2022/10/27
+date: '2022-10-27'
 ---
 
 ## 二、typescript 基础类型

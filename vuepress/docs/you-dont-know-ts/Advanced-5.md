@@ -1,7 +1,7 @@
 ---
 title: 第五章:泛型 Generics
 hideComments: false
-date: 2023/05/29
+date: '2023-05-29'
 ---
 
 ## 第五章 泛型 Generics

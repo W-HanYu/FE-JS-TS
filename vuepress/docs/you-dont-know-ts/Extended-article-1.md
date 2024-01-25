@@ -1,6 +1,6 @@
 ---
 title: 1. TypeScript 泛型中的 K、T 和 V 是什么？
-date: 2023/11/26
+date: '2023-11-26'
 ---
 
 # TypeScript 泛型中的 K、T 和 V 是什么？

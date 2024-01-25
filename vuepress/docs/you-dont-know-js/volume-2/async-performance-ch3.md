@@ -1,6 +1,6 @@
 ---
 title: 第3章:Promises
-date: 2023/06/15
+date: '2023-06-15'
 hideComments: false
 ---
 

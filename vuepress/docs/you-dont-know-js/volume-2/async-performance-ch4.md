@@ -1,6 +1,6 @@
 ---
 title: 第4章:Generator
-date: 2023/06/15
+date: '2023-06-15'
 hideComments: false
 ---
 
